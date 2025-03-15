@@ -56,7 +56,7 @@ class InstallLicensePackage extends Command
      */
     protected function loadMigrations()
     {
-        $this->call('migrate', ['--path' => 'database/migrations']);
+        $this->call('migrate', ['--path' => '/../../database/migrations']);
     }
 
     /**

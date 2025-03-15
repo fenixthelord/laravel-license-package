@@ -3,6 +3,6 @@
 return [
     'providers' => [
         // باقي المزودين
-        \YourPackage\Providers\LicenseServiceProvider::class,
+        \Fenixthelord\Providers\LicenseServiceProvider::class,
     ],
 ];
