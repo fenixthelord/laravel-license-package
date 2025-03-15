@@ -39,5 +39,10 @@ class LicenseServiceProvider extends ServiceProvider
             ], 'laravel-license-config');
         }
         
+        $this->publishes([
+            __DIR__.'/../config/laravel-license.php' => config_path('laravel-license.php'),
+        ], 'laravel-license-config');
+        
+        
     }
 }
