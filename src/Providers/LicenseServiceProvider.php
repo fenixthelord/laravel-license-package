@@ -30,8 +30,8 @@ class LicenseServiceProvider extends ServiceProvider
 
         // تحميل الترحيلات والطرق للسيرفر
         if (config('laravel-license.mode') === 'server') {
-            $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-            $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
+            $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
+            $this->loadRoutesFrom(__DIR__ . '/../../routes/api.php');
         }
 
         // نشر الإعدادات والملفات الخاصة بالبكج
@@ -46,7 +46,7 @@ class LicenseServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/../../config/laravel-license.php' => config_path('laravel-license.php'),
-        ], 'laravel-license');
+        ], 'laravel-license-config');
     }
 
     
