@@ -81,5 +81,8 @@ class LicenseServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/../../config/laravel-license.php', 'laravel-license');
+        $this->commands([
+            \Fenixthelord\LaravelLicense\Console\Commands\InstallLicensePackage::class,
+        ]);
     }
 }
