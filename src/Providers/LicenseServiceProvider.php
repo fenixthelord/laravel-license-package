@@ -18,9 +18,26 @@ class LicenseServiceProvider extends ServiceProvider
     {
         // تحقق من وجود البكج
         if (!App::bound(Fenixthelord\License\LicenseServiceProvider::class)) {
-            exit('The license management package is missing. The application cannot run.');
+            abort(403,'The license management package is missing. The application cannot run.');
         }
          $this->app['router']->aliasMiddleware('checkLicense', \Fenixthelord\LaravelLicense\Http\Middleware\CheckLicense::class);
+
+         // إعداد الـ Middleware للعميل
+        if (config('laravel-license.mode') === 'client') {
+            $this->app['router']->aliasMiddleware('license', CheckLicense::class);
+        }
+
+        // تحميل الترحيلات والطرق للسيرفر
+        if (config('laravel-license.mode') === 'server') {
+            $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+            $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
+        }
+
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__ . '/../config/laravel-license.php' => config_path('laravel-license.php'),
+            ], 'laravel-license-config');
+        }
     }
 
     /**
@@ -30,6 +47,6 @@ class LicenseServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // يمكنك إضافة أي خدمات هنا إذا لزم الأمر
+        $this->mergeConfigFrom(__DIR__ . '/../config/laravel-license.php', 'laravel-license');
     }
 }
