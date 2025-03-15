@@ -3,6 +3,7 @@
 
 namespace Fenixthelord\License\Http\Controllers;
 
+
 use Illuminate\Http\Request;
 use Fenixthelord\License\Models\License;
 use Fenixthelord\License\Exceptions\InvalidLicenseException;
