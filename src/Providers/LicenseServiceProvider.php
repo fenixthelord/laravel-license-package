@@ -1,6 +1,6 @@
 <?php
 
-namespace Fenixthelord\Providers;
+namespace Fenixthelord\License\LicenseServiceProvider;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\App;
@@ -16,7 +16,7 @@ class LicenseServiceProvider extends ServiceProvider
     public function boot()
     {
         // تحقق من وجود البكج
-        if (!App::bound('LaravelLicense')) {
+        if (!App::bound(Fenixthelord\License\LicenseServiceProvider::class)) {
             exit('The license management package is missing. The application cannot run.');
         }
     }
