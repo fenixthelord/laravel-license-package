@@ -37,7 +37,7 @@ class LicenseServiceProvider extends ServiceProvider
         // نشر الإعدادات والملفات الخاصة بالبكج
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/laravel-license.php' => config_path('laravel-license.php'),
+                __DIR__ . '/../../config/laravel-license.php' => config_path('laravel-license.php'),
             ], 'laravel-license-config');
         }
     }
@@ -49,6 +49,6 @@ class LicenseServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/laravel-license.php', 'laravel-license');
+        $this->mergeConfigFrom(__DIR__ . '/../../config/laravel-license.php', 'laravel-license');
     }
 }
