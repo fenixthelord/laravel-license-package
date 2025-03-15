@@ -32,5 +32,12 @@ class LicenseServiceProvider extends ServiceProvider
             $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
             $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
         }
+
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__ . '/../config/laravel-license.php' => config_path('laravel-license.php'),
+            ], 'laravel-license-config');
+        }
+        
     }
 }
