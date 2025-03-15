@@ -1,6 +1,7 @@
 <?php
 
-namespace Fenixthelord\License\Providers;
+namespace Fenixthelord\LaravelLicense\Providers;
+
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\App;
