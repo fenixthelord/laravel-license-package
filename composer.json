@@ -1,8 +1,8 @@
 {
     "name": "fenixthelord/laravel-license-package",
     "description": "A Laravel package to manage licenses.",
-    "version": "1.0.1-beta",  
-    "license": "MIT", 
+    "version": "1.0.1-beta",
+    "license": "MIT",
     "authors": [
         {
             "name": "Muhammad Khalaf",
@@ -11,6 +11,19 @@
     ],
     "require": {
         "php": "^8.1",
-        "illuminate/support": "^8.0|^9.0|^10.0"
+        "illuminate/support": "^10.0|^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Fenixthelord\\LaravelLicense\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Fenixthelord\\LaravelLicense\\LicenseServiceProvider"
+            ],
+            "aliases": {}
+        }
     }
 }
