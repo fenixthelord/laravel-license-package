@@ -20,6 +20,7 @@ class LicenseServiceProvider extends ServiceProvider
         if (!App::bound(Fenixthelord\License\LicenseServiceProvider::class)) {
             exit('The license management package is missing. The application cannot run.');
         }
+         $this->app['router']->aliasMiddleware('checkLicense', \Fenixthelord\LaravelLicense\Http\Middleware\CheckLicense::class);
     }
 
     /**
