@@ -17,7 +17,7 @@ class LicenseServiceProvider extends ServiceProvider
     {
         // تحقق من وجود البكج
         if (!App::has(Fenixthelord\LaravelLicense\Providers\LicenseServiceProvider::class)) {
-            exit('The license management package is missing. The application cannot run.');
+            //exit('The license management package is missing. The application cannot run.');
         }
 
         // تسجيل الـ Middleware
