@@ -3,6 +3,8 @@
 namespace LaravelLicense\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\App;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 class LicenseServiceProvider extends ServiceProvider
 {
@@ -14,7 +16,7 @@ class LicenseServiceProvider extends ServiceProvider
     public function boot()
     {
         // تحقق من وجود البكج
-        if (!class_exists('YourLicensePackageClass')) {
+        if (!App::bound('LaravelLicense')) {
             exit('The license management package is missing. The application cannot run.');
         }
     }
