@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LaravelLicense\License\Exceptions;
+namespace Fenixthelord\License\Exceptions;
 
 use Exception;
 

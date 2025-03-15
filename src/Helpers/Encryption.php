@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelLicense\License\Helpers;
+namespace Fenixthelord\License\Helpers;
 
 use Illuminate\Support\Facades\Crypt;
 

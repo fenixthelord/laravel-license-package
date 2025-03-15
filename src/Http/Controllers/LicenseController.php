@@ -1,11 +1,11 @@
 <?php
 
 
-namespace LaravelLicense\License\Http\Controllers;
+namespace Fenixthelord\License\Http\Controllers;
 
 use Illuminate\Http\Request;
-use LaravelLicense\License\Models\License;
-use LaravelLicense\License\Exceptions\InvalidLicenseException;
+use Fenixthelord\License\Models\License;
+use Fenixthelord\License\Exceptions\InvalidLicenseException;
 
 class LicenseController extends Controller
 {

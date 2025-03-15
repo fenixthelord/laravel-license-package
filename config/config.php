@@ -2,6 +2,6 @@
 
 return [
     'providers' => [
-        LaravelLicense\Providers\LicenseServiceProvider::class,
+        Fenixthelord\Providers\LicenseServiceProvider::class,
     ],
 ];

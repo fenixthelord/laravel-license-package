@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LaravelLicense\License\Models;
+namespace Fenixthelord\License\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

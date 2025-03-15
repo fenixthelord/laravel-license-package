@@ -1,9 +1,9 @@
 <?php
 
-namespace LaravelLicense\License\Services;
+namespace Fenixthelord\License\Services;
 
 use Illuminate\Support\Facades\Http;
-use LaravelLicense\License\Exceptions\InvalidLicenseException;
+use Fenixthelord\License\Exceptions\InvalidLicenseException;
 
 class LicenseService
 {

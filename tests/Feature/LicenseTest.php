@@ -1,9 +1,9 @@
 <?php
 
 
-namespace LaravelLicense\License\Tests\Feature;
+namespace Fenixthelord\License\Tests\Feature;
 
-use LaravelLicense\License\Models\License;
+use Fenixthelord\License\Models\License;
 use Tests\TestCase;
 
 class LicenseTest extends TestCase

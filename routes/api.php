@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use LaravelLicense\License\Http\Controllers\LicenseController;
+use Fenixthelord\License\Http\Controllers\LicenseController;
 
 
 if (config('laravel-license.mode') === 'server') {

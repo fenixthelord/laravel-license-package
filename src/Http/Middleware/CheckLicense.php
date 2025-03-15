@@ -1,9 +1,9 @@
 <?php
 
-namespace LaravelLicense\License\Http\Middleware;
+namespace Fenixthelord\License\Http\Middleware;
 
 use Closure;
-use LaravelLicense\License\Exceptions\InvalidLicenseException;
+use Fenixthelord\License\Exceptions\InvalidLicenseException;
 
 class CheckLicense
 {

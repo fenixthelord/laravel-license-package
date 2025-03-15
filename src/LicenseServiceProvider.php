@@ -1,9 +1,9 @@
 <?php
 
-namespace LaravelLicense\License;
+namespace Fenixthelord\LaravelLicense;
 
 use Illuminate\Support\ServiceProvider;
-use LaravelLicense\License\Http\Middleware\CheckLicense;
+use Fenixthelord\LaravelLicense\Http\Middleware\CheckLicense;
 
 class LicenseServiceProvider extends ServiceProvider
 {
@@ -20,7 +20,12 @@ class LicenseServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__ . '/../config/laravel-license.php' => config_path('laravel-license.php'),
             ], 'config');
+        }else{  
+            $this->publishes([
+                __DIR__.'/../config/laravel-license.php' => config_path('laravel-license.php'),
+            ], 'laravel-license-config');
         }
+
 
         // إعداد الـ Middleware للعميل
         if (config('laravel-license.mode') === 'client') {

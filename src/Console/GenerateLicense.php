@@ -1,9 +1,9 @@
 <?php
 
-namespace LaravelLicense\License\Console\Commands;
+namespace Fenixthelord\License\Console\Commands;
 
 use Illuminate\Console\Command;
-use LaravelLicense\License\Models\License;
+use Fenixthelord\License\Models\License;
 
 class GenerateLicense extends Command
 {

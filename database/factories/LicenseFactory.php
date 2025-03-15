@@ -1,8 +1,8 @@
 <?php
 
-namespace LaravelLicense\License\Database\Factories;
+namespace Fenixthelord\License\Database\Factories;
 
-use LaravelLicense\License\Models\License;
+use Fenixthelord\License\Models\License;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class LicenseFactory extends Factory
