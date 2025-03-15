@@ -54,8 +54,9 @@ class LicenseServiceProvider extends ServiceProvider
     protected function loadServerResources(): void
     {
         if (config('laravel-license.mode') === 'server') {
-            $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
+            $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations/2025_03_11_000000_create_licenses_table.php');
             $this->loadRoutesFrom(__DIR__ . '/../../routes/api.php');
+            
         }
     }
 
