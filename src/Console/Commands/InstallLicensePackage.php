@@ -3,7 +3,6 @@
 namespace Fenixthelord\LaravelLicense\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Artisan;
 
 class InstallLicensePackage extends Command
 {
@@ -22,51 +21,51 @@ class InstallLicensePackage extends Command
     protected $description = 'Install License Package and configure as client or server';
 
     /**
-     * Execute the console command.
-     *
-     * @return void
+     * تنفيذ الأمر
      */
     public function handle()
     {
-        // سؤال المستخدم
+        // سؤال المستخدم لاختيار الوضع
         $choice = $this->choice(
             'Do you want to use the package as a Client or Server?',
             ['client', 'server'],
             0
         );
 
-        // بناءً على الاختيار
-        if ($choice == 'server') {
-            $this->info('Setting up for server...');
-            // نشر الترحيلات، النماذج، والطرق الخاصة بالسيرفر
-            $this->call('vendor:publish', ['--tag' => 'laravel-license-config']);
-            $this->loadMigrations();
-            $this->loadRoutes();
+        // نشر ملف الإعدادات في كلتا الحالتين
+        $this->info('Publishing configuration...');
+        $this->call('vendor:publish', ['--tag' => 'laravel-license-config']);
+
+        if ($choice === 'server') {
+            $this->setupServer();
         } else {
-            $this->info('Setting up for client...');
-            // نشر ملفات العميل
-            $this->call('vendor:publish', ['--tag' => 'laravel-license-config']);
+            $this->setupClient();
         }
+
+        $this->info('License package installed successfully!');
     }
 
     /**
-     * نشر الترحيلات الخاصة بالسيرفر.
-     *
-     * @return void
+     * ضبط الحزمة كخادم (Server)
      */
-    protected function loadMigrations()
+    protected function setupServer()
     {
-        $this->call('migrate', ['--path' => '/../../database/migrations/*']);
+        $this->info('Setting up for Server mode...');
+
+        // نشر المهاجرات والموديل
+        $this->call('vendor:publish', ['--tag' => 'laravel-license-migrations']);
+        $this->call('vendor:publish', ['--tag' => 'laravel-license-model']);
+
+        // تنفيذ المهاجرات
+        $this->call('migrate');
     }
 
     /**
-     * نشر الطرق الخاصة بالسيرفر.
-     *
-     * @return void
+     * ضبط الحزمة كعميل (Client)
      */
-    protected function loadRoutes()
+    protected function setupClient()
     {
-        // لو كان السيرفر، نشر التوجيهات
-        Artisan::call('route:cache');
+        $this->info('Setting up for Client mode...');
+        // لا يوجد إعدادات إضافية للعميل حاليًا
     }
 }
