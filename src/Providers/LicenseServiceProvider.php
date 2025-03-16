@@ -57,12 +57,12 @@ class LicenseServiceProvider extends ServiceProvider
 
             // نشر المهاجرات
             $this->publishes([
-                __DIR__ . '/../database/migrations/' => database_path('migrations'),
+                __DIR__ . '/../../database/migrations/' => database_path('migrations'),
             ], 'laravel-license-migrations');
 
             // نشر الموديل License.php
             $this->publishes([
-                __DIR__ . '/../src/Models/License.php' => app_path('Models/License.php'),
+                __DIR__ . '/../../src/Models/License.php' => app_path('Models/License.php'),
             ], 'laravel-license-model');
         }
     }
