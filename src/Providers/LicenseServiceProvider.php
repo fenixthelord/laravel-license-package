@@ -3,6 +3,7 @@
 namespace Fenixthelord\License\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use FenixTheLord\License\Support\LicenseChecker;
 
 class LicenseServiceProvider extends ServiceProvider
 {
@@ -11,10 +12,24 @@ class LicenseServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (config('laravel-license.mode') === 'client') {
+            LicenseChecker::ensureLicensePackageExists();
+        }
+        
         $this->registerMiddleware();
         $this->loadServerResources();
         $this->publishResources();
+        $this->publishBootstrap();
     }
+
+    protected function publishBootstrap(): void
+    {
+        $this->publishes([
+            __DIR__ . '/../Support/license-check.php' => base_path('bootstrap/license-check.php'),
+        ], 'laravel-license');
+    }
+
+    
 
     /**
      * Register the package middleware.
@@ -25,6 +40,8 @@ class LicenseServiceProvider extends ServiceProvider
 
         if (config('laravel-license.mode') === 'client') {
             $this->app['router']->pushMiddlewareToGroup('web', \Fenixthelord\License\Http\Middleware\CheckLicense::class);
+            LicenseChecker::ensureLicensePackageExists();
+            
         }
     }
 
