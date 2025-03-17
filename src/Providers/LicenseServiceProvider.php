@@ -5,6 +5,7 @@ namespace Fenixthelord\License\Providers;
 use Fenixthelord\License\Support\LicenseChecker;
 use Fenixthelord\License\Console\Commands\InstallServiceProvider;
 use Illuminate\Support\ServiceProvider;
+use Filament\FilamentServiceProvider;
 
 class LicenseServiceProvider extends ServiceProvider
 {
@@ -22,20 +23,20 @@ class LicenseServiceProvider extends ServiceProvider
             $this->app['router']->pushMiddlewareToGroup('web', \Fenixthelord\License\Http\Middleware\CheckLicense::class);
         }
 
-         if ($this->app->runningInConsole()) {
+        if ($this->app->runningInConsole()) {
             $this->commands([
                 InstallServiceProvider::class,
             ]);
         }
-        
+
         $this->registerMiddleware();
         $this->loadServerResources();
         $this->publishResources();
         $this->publishBootstrap();
+
         if (config('laravel-license.mode') === 'server') {
             $this->installFilament();
         }
-       
     }
 
     protected function publishBootstrap(): void
@@ -44,8 +45,6 @@ class LicenseServiceProvider extends ServiceProvider
             __DIR__ . '/../Support/license-check.php' => base_path('bootstrap/license-check.php'),
         ], 'laravel-license');
     }
-
-    
 
     /**
      * Register the package middleware.
@@ -57,12 +56,8 @@ class LicenseServiceProvider extends ServiceProvider
         if (config('laravel-license.mode') === 'client') {
             $this->app['router']->pushMiddlewareToGroup('web', \Fenixthelord\License\Http\Middleware\CheckLicense::class);
             LicenseChecker::ensureLicensePackageExists();
-            
         }
     }
-
-    
-
 
     /**
      * Load server migrations and routes if the mode is server.
@@ -74,8 +69,6 @@ class LicenseServiceProvider extends ServiceProvider
             $this->loadRoutesFrom(__DIR__ . '/../../routes/api.php');
         }
     }
-    
-
 
     /**
      * Publish configuration file and other resources.
@@ -100,8 +93,6 @@ class LicenseServiceProvider extends ServiceProvider
             ], 'laravel-license-middleware');
         }
     }
-
-    
 
     /**
      * Register any application services.
@@ -138,12 +129,14 @@ class LicenseServiceProvider extends ServiceProvider
             return;
         }
 
-        // تثبيت Filament
-        $this->app->make('filament')->install();
+        // تأكد من تضمين FilamentServiceProvider يدويًا
+        $this->app->register(FilamentServiceProvider::class);
 
-        // إنشاء Resource لـ License بشكل تلقائي
-        \Artisan::call('filament:resource', ['name' => 'License']);
+        // إنشاء Resource لـ License بشكل يدوي
+        if (!class_exists(\Fenixthelord\License\Filament\Resources\LicenseResource::class)) {
+            \Artisan::call('filament:resource', ['name' => 'License']);
+        }
 
-        $this->info("admin panel installed");
+        $this->info("Admin panel installed with Filament.");
     }
 }
