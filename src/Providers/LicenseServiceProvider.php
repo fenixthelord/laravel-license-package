@@ -2,8 +2,8 @@
 
 namespace Fenixthelord\License\Providers;
 
+use Fenixthelord\License\Support\LicenseChecker;
 use Illuminate\Support\ServiceProvider;
-use FenixTheLord\License\Support\LicenseChecker;
 
 class LicenseServiceProvider extends ServiceProvider
 {
