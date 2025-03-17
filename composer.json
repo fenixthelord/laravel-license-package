@@ -1,7 +1,7 @@
 {
     "name": "fenixthelord/laravel-license-package",
     "description": "A Laravel package to manage licenses.",
-    "version": "1.0.3.0", 
+    "version": "1.0.3.1", 
     "license": "MIT", 
     "authors": [
         {

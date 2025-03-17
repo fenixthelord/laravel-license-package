@@ -3,17 +3,28 @@
 namespace Fenixthelord\License\Http\Middleware;
 
 use Closure;
-use Fenixthelord\License\Exceptions\InvalidLicenseException;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Fenixthelord\LaravelLicense\Exceptions\InvalidLicenseException;
 
 class CheckLicense
 {
-    public function handle($request, Closure $next)
-{
-    if (!class_exists('Fenixthelord\\LaravelLicense\\LicenseServiceProvider')) {
-        abort(403, 'License management package is missing.');
+    public function handle(Request $request, Closure $next): Response
+    {
+        // التأكد من أن البكج مثبتة
+        if (!class_exists(\Fenixthelord\LaravelLicense\LicenseServiceProvider::class)) {
+            abort(403, 'License management package is missing.');
+        }
+
+        // تحميل إعدادات الرخصة
+        $licenseKey = config('laravel-license.license_key');
+        $licenseStatus = config('laravel-license.license_status'); // حالة الرخصة
+
+        // تحقق من وجود مفتاح الرخصة وحالته
+        if (!$licenseKey || $licenseStatus !== 'valid') {
+            throw new InvalidLicenseException('The application license is invalid or missing.');
+        }
+
+        return $next($request);
     }
-
-    return $next($request);
-}
-
 }
