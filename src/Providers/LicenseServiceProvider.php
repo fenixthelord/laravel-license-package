@@ -36,6 +36,8 @@ class LicenseServiceProvider extends ServiceProvider
         $this->loadServerResources();
         $this->publishResources();
         $this->publishBootstrap();
+        // تثبيت Filament بشكل تلقائي
+        $this->installFilament();
     }
 
     protected function publishBootstrap(): void
@@ -129,5 +131,19 @@ class LicenseServiceProvider extends ServiceProvider
                 __DIR__ . '/../Http/Controllers/LicenseController.php' => app_path('Http/Controllers/LicenseController.php'),
             ], 'laravel-license-controller');
         }
+    }
+
+    protected function installFilament()
+    {
+        // تحقق إذا كان Filament مثبتًا بالفعل
+        if (!class_exists(\Filament\FilamentServiceProvider::class)) {
+            return;
+        }
+
+        // تثبيت Filament
+        $this->app->make('filament')->install();
+
+        // إنشاء Resource لـ License بشكل تلقائي
+        \Artisan::call('filament:resource', ['name' => 'License']);
     }
 }
