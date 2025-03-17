@@ -11,13 +11,8 @@ class LicenseServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // تسجيل الـ Middleware
         $this->registerMiddleware();
-
-        // تحميل الترحيلات والطرق إذا كان الوضع سيرفر
         $this->loadServerResources();
-
-        // نشر الإعدادات والملفات الخاصة بالبكج
         $this->publishResources();
     }
 
@@ -29,7 +24,7 @@ class LicenseServiceProvider extends ServiceProvider
         $this->app['router']->aliasMiddleware('checkLicense', \Fenixthelord\LaravelLicense\Http\Middleware\CheckLicense::class);
 
         if (config('laravel-license.mode') === 'client') {
-            $this->app['router']->aliasMiddleware('license', \Fenixthelord\LaravelLicense\Http\Middleware\CheckLicense::class);
+            $this->app['router']->pushMiddlewareToGroup('web', \Fenixthelord\LaravelLicense\Http\Middleware\CheckLicense::class);
         }
     }
 
@@ -50,20 +45,21 @@ class LicenseServiceProvider extends ServiceProvider
     protected function publishResources(): void
     {
         if ($this->app->runningInConsole()) {
-            // نشر ملف الإعدادات
             $this->publishes([
                 __DIR__ . '/../../config/laravel-license.php' => config_path('laravel-license.php'),
             ], 'laravel-license-config');
 
-            // نشر المهاجرات
             $this->publishes([
                 __DIR__ . '/../../database/migrations/' => database_path('migrations'),
             ], 'laravel-license-migrations');
 
-            // نشر الموديل License.php
             $this->publishes([
                 __DIR__ . '/../../src/Models/License.php' => app_path('Models/License.php'),
             ], 'laravel-license-model');
+
+            $this->publishes([
+                __DIR__ . '/../../src/Http/Middleware/CheckLicense.php' => app_path('Http/Middleware/CheckLicense.php'),
+            ], 'laravel-license-middleware');
         }
     }
 
@@ -74,7 +70,6 @@ class LicenseServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../../config/laravel-license.php', 'laravel-license');
 
-        // تسجيل الأوامر الخاصة بالحزمة
         if ($this->app->runningInConsole()) {
             $this->commands([
                 \Fenixthelord\LaravelLicense\Console\Commands\InstallLicensePackage::class,
