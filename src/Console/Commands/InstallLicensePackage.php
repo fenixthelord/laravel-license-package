@@ -47,6 +47,8 @@ class InstallLicensePackage extends Command
         }
     }
 
+    
+
     /**
      * إعداد وضع العميل.
      */

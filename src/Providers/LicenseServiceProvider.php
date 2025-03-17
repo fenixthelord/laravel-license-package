@@ -28,6 +28,9 @@ class LicenseServiceProvider extends ServiceProvider
         }
     }
 
+    
+
+
     /**
      * Load server migrations and routes if the mode is server.
      */
@@ -38,6 +41,8 @@ class LicenseServiceProvider extends ServiceProvider
             $this->loadRoutesFrom(__DIR__ . '/../../routes/api.php');
         }
     }
+    
+
 
     /**
      * Publish configuration file and other resources.
@@ -62,6 +67,8 @@ class LicenseServiceProvider extends ServiceProvider
             ], 'laravel-license-middleware');
         }
     }
+
+    
 
     /**
      * Register any application services.
