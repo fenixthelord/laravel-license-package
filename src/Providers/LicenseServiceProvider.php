@@ -3,7 +3,7 @@
 namespace Fenixthelord\License\Providers;
 
 use Fenixthelord\License\Support\LicenseChecker;
-use Fenixthelord\License\Console\Commands\InstallLicensePackage;
+use Fenixthelord\License\Console\Commands\InstallServiceProvider;
 use Illuminate\Support\ServiceProvider;
 
 class LicenseServiceProvider extends ServiceProvider
@@ -26,9 +26,9 @@ class LicenseServiceProvider extends ServiceProvider
             $this->app['router']->pushMiddlewareToGroup('web', \Fenixthelord\License\Http\Middleware\CheckLicense::class);
         }
 
-        if ($this->app->runningInConsole()) {
+         if ($this->app->runningInConsole()) {
             $this->commands([
-                InstallLicensePackage::class,
+                InstallServiceProvider::class,
             ]);
         }
         

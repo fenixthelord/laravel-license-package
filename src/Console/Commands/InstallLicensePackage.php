@@ -37,9 +37,6 @@ class InstallLicensePackage extends Command
         // نشر ملف الإعدادات المشترك
         $this->call('vendor:publish', ['--tag' => 'laravel-license-config']);
     
-        // تسجيل AppServiceProvider
-        $this->registerAppServiceProvider();
-    
         if ($choice === 'server') {
             $this->info('Setting up for Server mode...');
             $this->setupServerMode();
@@ -49,32 +46,7 @@ class InstallLicensePackage extends Command
         }
     }
 
-    /**
-     * تسجيل `AppServiceProvider` في `config/app.php`.
-     */
-    protected function registerAppServiceProvider()
-    {
-        $configPath = config_path('app.php');
-
-        if (File::exists($configPath)) {
-            $configContent = File::get($configPath);
-            $serviceProvider = "Fenixthelord\\License\\Providers\\AppServiceProvider::class,";
-
-            if (!str_contains($configContent, $serviceProvider)) {
-                $this->info('Registering AppServiceProvider...');
-                $updatedContent = str_replace(
-                    "'providers' => [",
-                    "'providers' => [\n        $serviceProvider",
-                    $configContent
-                );
-                File::put($configPath, $updatedContent);
-            } else {
-                $this->info('AppServiceProvider is already registered.');
-            }
-        } else {
-            $this->error('app.php not found! AppServiceProvider not registered.');
-        }
-    }
+    
 
     /**
      * إعداد وضع العميل.
@@ -143,6 +115,10 @@ class InstallLicensePackage extends Command
         }
     }
 
+
+
+    
+    
     /**
      * إعداد وضع السيرفر.
      */
@@ -158,7 +134,7 @@ class InstallLicensePackage extends Command
         // نشر التوجيهات (routes/api.php)
         $this->publishRoutes();
 
-        $this->publishModel();
+         $this->publishModel();
     }
     
     /**
