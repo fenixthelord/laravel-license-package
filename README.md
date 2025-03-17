@@ -47,9 +47,9 @@ Use HTTPS for all license server communications.
 
 
 // database/factories/LicenseFactory.php
-namespace LaravelLicense\License\Database\Factories;
+namespace License\License\Database\Factories;
 
-use LaravelLicense\License\Models\License;
+use License\License\Models\License;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class LicenseFactory extends Factory

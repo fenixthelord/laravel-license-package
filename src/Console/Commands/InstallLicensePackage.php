@@ -1,6 +1,6 @@
 <?php
 
-namespace Fenixthelord\LaravelLicense\Console\Commands;
+namespace Fenixthelord\License\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
@@ -69,7 +69,7 @@ class InstallLicensePackage extends Command
 
         if (File::exists($kernelPath)) {
             $kernelContent = File::get($kernelPath);
-            $middlewareLine = "\\Fenixthelord\\LaravelLicense\\Http\\Middleware\\CheckLicense::class,";
+            $middlewareLine = "\\Fenixthelord\\License\\Http\\Middleware\\CheckLicense::class,";
 
             if (!str_contains($kernelContent, $middlewareLine)) {
                 $this->info('Adding License Middleware to Kernel...');
@@ -96,7 +96,7 @@ class InstallLicensePackage extends Command
 
         if (File::exists($configPath)) {
             $configContent = File::get($configPath);
-            $serviceProvider = "Fenixthelord\\LaravelLicense\\Providers\\LicenseServiceProvider::class,";
+            $serviceProvider = "Fenixthelord\\License\\Providers\\LicenseServiceProvider::class,";
 
             if (!str_contains($configContent, $serviceProvider)) {
                 $this->info('Registering LicenseServiceProvider...');

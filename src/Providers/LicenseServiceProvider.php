@@ -1,6 +1,6 @@
 <?php
 
-namespace Fenixthelord\LaravelLicense\Providers;
+namespace Fenixthelord\License\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -72,7 +72,7 @@ class LicenseServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                \Fenixthelord\LaravelLicense\Console\Commands\InstallLicensePackage::class,
+                \Fenixthelord\License\Console\Commands\InstallLicensePackage::class,
             ]);
         }
     }
