@@ -7,10 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class License extends Model
 {
-    protected $fillable = [
-        'key', 
-        'domain',
-        'valid_until',
-        'is_active'
-    ];
+    protected $fillable = ['key', 'product_id', 'valid_until', 'domain', 'is_active'];
 }

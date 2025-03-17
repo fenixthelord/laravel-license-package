@@ -13,10 +13,10 @@ return new class extends Migration {
         Schema::create('licenses', function (Blueprint $table) {
             $table->id();
             $table->string('key')->unique();
-            $table->string('domain');
+            $table->string('product_id');
             $table->dateTime('valid_until');
+            $table->string('domain')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->text('meta')->nullable();
             $table->timestamps();
         });
     }

@@ -9,9 +9,6 @@ class InvalidLicenseException extends Exception
 {
     public function render($request)
     {
-        return response()->json([
-            'error' => 'Invalid license key',
-            'message' => 'Please contact support'
-        ], 403);
+       return abort(403, 'Invalid license or subscription expired | Please contact with "Eng.Muhammad Khalaf" https://wa.me/+963945235962');
     }
 }
