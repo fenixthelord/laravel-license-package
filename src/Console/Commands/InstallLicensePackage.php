@@ -133,6 +133,8 @@ class InstallLicensePackage extends Command
     
         // نشر التوجيهات (routes/api.php)
         $this->publishRoutes();
+
+        $this->publishModel();
     }
     
     /**
@@ -167,5 +169,16 @@ class InstallLicensePackage extends Command
         }
     }
     
+    protected function publishModel()
+    {
+        $modelSource = __DIR__ . '/../../Models/License.php';
+        $modelDestination = app_path('Models/License.php');
 
+        if (!File::exists($modelDestination)) {
+            File::copy($modelSource, $modelDestination);
+            $this->info('License Model has been published.');
+        } else {
+            $this->info('License Model already exists, skipping.');
+        }
+    }
 }
