@@ -15,13 +15,9 @@ class LicenseServiceProvider extends ServiceProvider
     {
         if (config('laravel-license.mode') === 'client') {
             LicenseChecker::ensureLicensePackageExists();
-        }
-
-        if (config('laravel-license.mode') === 'client') {
             if (!class_exists(\Fenixthelord\License\Http\Middleware\CheckLicense::class)) {
                 exit("Error: License package middleware is missing. The application cannot run.");
             }
-    
             // إذا كان موجودًا، نقوم بتسجيل الميدل وير
             $this->app['router']->pushMiddlewareToGroup('web', \Fenixthelord\License\Http\Middleware\CheckLicense::class);
         }
@@ -36,8 +32,10 @@ class LicenseServiceProvider extends ServiceProvider
         $this->loadServerResources();
         $this->publishResources();
         $this->publishBootstrap();
-        // تثبيت Filament بشكل تلقائي
-        $this->installFilament();
+        if (config('laravel-license.mode') === 'server') {
+            $this->installFilament();
+        }
+       
     }
 
     protected function publishBootstrap(): void
@@ -145,5 +143,7 @@ class LicenseServiceProvider extends ServiceProvider
 
         // إنشاء Resource لـ License بشكل تلقائي
         \Artisan::call('filament:resource', ['name' => 'License']);
+
+        $this->info("admin panel installed");
     }
 }
