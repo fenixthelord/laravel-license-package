@@ -21,10 +21,10 @@ class LicenseServiceProvider extends ServiceProvider
      */
     protected function registerMiddleware(): void
     {
-        $this->app['router']->aliasMiddleware('checkLicense', \Fenixthelord\LaravelLicense\Http\Middleware\CheckLicense::class);
+        $this->app['router']->aliasMiddleware('checkLicense', \Fenixthelord\License\Http\Middleware\CheckLicense::class);
 
         if (config('laravel-license.mode') === 'client') {
-            $this->app['router']->pushMiddlewareToGroup('web', \Fenixthelord\LaravelLicense\Http\Middleware\CheckLicense::class);
+            $this->app['router']->pushMiddlewareToGroup('web', \Fenixthelord\License\Http\Middleware\CheckLicense::class);
         }
     }
 
