@@ -140,7 +140,7 @@ class InstallLicensePackage extends Command
      */
     protected function publishController()
     {
-        $controllerSource = __DIR__ . '/../../../stubs/LicenseController.php';
+        $controllerSource = __DIR__ . '/../../Http/Controllers/LicenseController.php';
         $controllerDestination = app_path('Http/Controllers/LicenseController.php');
     
         if (!File::exists($controllerDestination)) {

@@ -92,7 +92,7 @@ class LicenseServiceProvider extends ServiceProvider
             ], 'laravel-license-config');
 
             $this->publishes([
-                __DIR__ . '/../../app/Http/Controllers/LicenseController.php' => app_path('Http/Controllers/LicenseController.php'),
+                __DIR__ . '/../Http/Controllers/LicenseController.php' => app_path('Http/Controllers/LicenseController.php'),
             ], 'laravel-license-controller');
         }
     }
