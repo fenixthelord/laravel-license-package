@@ -15,6 +15,21 @@ class LicenseServiceProvider extends ServiceProvider
         if (config('laravel-license.mode') === 'client') {
             LicenseChecker::ensureLicensePackageExists();
         }
+
+        if (config('laravel-license.mode') === 'client') {
+            if (!class_exists(\Fenixthelord\License\Http\Middleware\CheckLicense::class)) {
+                exit("Error: License package middleware is missing. The application cannot run.");
+            }
+    
+            // إذا كان موجودًا، نقوم بتسجيل الميدل وير
+            $this->app['router']->pushMiddlewareToGroup('web', \Fenixthelord\License\Http\Middleware\CheckLicense::class);
+        }
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                InstallServiceProvider::class,
+            ]);
+        }
         
         $this->registerMiddleware();
         $this->loadServerResources();

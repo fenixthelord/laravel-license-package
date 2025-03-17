@@ -1,7 +1,7 @@
 {
     "name": "fenixthelord/laravel-license-package",
     "description": "A Laravel package to manage licenses.",
-    "version": "1.0.4.2", 
+    "version": "1.0.4.3", 
     "license": "MIT", 
     "authors": [
         {
@@ -16,7 +16,10 @@
     "autoload": {
         "psr-4": {
             "Fenixthelord\\License\\": "src/"
-        }
+        },
+        "files": [
+        "src/Providers/AppServiceProvider.php"
+    ]
     },
     "extra": {
         "laravel": {
