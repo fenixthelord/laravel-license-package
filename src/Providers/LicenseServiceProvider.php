@@ -132,9 +132,13 @@ class LicenseServiceProvider extends ServiceProvider
         // تأكد من تضمين FilamentServiceProvider يدويًا
         $this->app->register(FilamentServiceProvider::class);
 
-        // إنشاء Resource لـ License بشكل يدوي
-        if (!class_exists(\Fenixthelord\License\Filament\Resources\LicenseResource::class)) {
-            \Artisan::call('filament:resource', ['name' => 'License']);
+        // إنشاء Resource لـ License باستخدام الأمر الصحيح
+        $resourceClass = 'Fenixthelord\License\Filament\Resources\LicenseResource';
+
+        // تحقق من وجود resource مسبقًا
+        if (!class_exists($resourceClass)) {
+            // هنا نستخدم الأمر الصحيح لإنشاء resource
+            \Artisan::call('filament:make:resource', ['name' => 'LicenseResource']);
         }
 
         $this->info("Admin panel installed with Filament.");
