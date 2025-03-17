@@ -3,6 +3,7 @@
 namespace Fenixthelord\License\Providers;
 
 use Fenixthelord\License\Support\LicenseChecker;
+use Fenixthelord\License\Console\Commands\InstallLicensePackage;
 use Illuminate\Support\ServiceProvider;
 
 class LicenseServiceProvider extends ServiceProvider
@@ -27,7 +28,7 @@ class LicenseServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                InstallServiceProvider::class,
+                InstallLicensePackage::class,
             ]);
         }
         
