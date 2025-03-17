@@ -113,6 +113,7 @@ class LicenseServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 \Fenixthelord\License\Console\Commands\InstallLicensePackage::class,
+                \Fenixthelord\License\Console\Commands\InstallServiceProvider::class,
             ]);
         }
     }
