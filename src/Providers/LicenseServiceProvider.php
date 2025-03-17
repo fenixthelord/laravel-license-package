@@ -128,6 +128,11 @@ class LicenseServiceProvider extends ServiceProvider
         if (!class_exists(\Filament\FilamentServiceProvider::class)) {
             return;
         }
+    
+        \Artisan::call('filament:install');  // تثبيت Filament
+        \Artisan::call('filament:make:resource', ['name' => 'LicenseResource']);  // إنشاء الـ Resource
+        
+        
 
         // تأكد من تضمين FilamentServiceProvider يدويًا
         $this->app->register(FilamentServiceProvider::class);
