@@ -83,4 +83,17 @@ class LicenseServiceProvider extends ServiceProvider
             ]);
         }
     }
+
+    protected function publishConfigs(): void
+    {
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__ . '/../../config/laravel-license.php' => config_path('laravel-license.php'),
+            ], 'laravel-license-config');
+
+            $this->publishes([
+                __DIR__ . '/../../app/Http/Controllers/LicenseController.php' => app_path('Http/Controllers/LicenseController.php'),
+            ], 'laravel-license-controller');
+        }
+    }
 }

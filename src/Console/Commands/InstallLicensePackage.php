@@ -33,14 +33,13 @@ class InstallLicensePackage extends Command
             ['client', 'server'],
             0
         );
-
+    
         // نشر ملف الإعدادات المشترك
         $this->call('vendor:publish', ['--tag' => 'laravel-license-config']);
-
+    
         if ($choice === 'server') {
             $this->info('Setting up for Server mode...');
-            $this->call('vendor:publish', ['--tag' => 'laravel-license-migrations']);
-            $this->call('migrate');
+            $this->setupServerMode();
         } else {
             $this->info('Setting up for Client mode...');
             $this->setupClientMode();
@@ -115,4 +114,58 @@ class InstallLicensePackage extends Command
             $this->error('app.php not found! ServiceProvider not registered.');
         }
     }
+
+
+
+    
+    
+    /**
+     * إعداد وضع السيرفر.
+     */
+    protected function setupServerMode()
+    {
+        // نشر الميجريشنز
+        $this->call('vendor:publish', ['--tag' => 'laravel-license-migrations']);
+        $this->call('migrate');
+    
+        // نشر الكنترولر يدويًا (لأن Laravel لا يدعمه تلقائيًا)
+        $this->publishController();
+    
+        // نشر التوجيهات (routes/api.php)
+        $this->publishRoutes();
+    }
+    
+    /**
+     * نشر `LicenseController.php` يدويًا داخل `app/Http/Controllers/`
+     */
+    protected function publishController()
+    {
+        $controllerSource = __DIR__ . '/../../../stubs/LicenseController.php';
+        $controllerDestination = app_path('Http/Controllers/LicenseController.php');
+    
+        if (!File::exists($controllerDestination)) {
+            File::copy($controllerSource, $controllerDestination);
+            $this->info('LicenseController has been published.');
+        } else {
+            $this->info('LicenseController already exists, skipping.');
+        }
+    }
+    
+    /**
+     * نشر `routes/api.php`
+     */
+    protected function publishRoutes()
+    {
+        $routesSource = __DIR__ . '/../../../routes/api.php';
+        $routesDestination = base_path('routes/license_api.php');
+    
+        if (!File::exists($routesDestination)) {
+            File::copy($routesSource, $routesDestination);
+            $this->info('License API routes have been published.');
+        } else {
+            $this->info('License API routes already exist, skipping.');
+        }
+    }
+    
+
 }
