@@ -7,6 +7,7 @@ use Fenixthelord\License\Console\Commands\InstallServiceProvider;
 use Illuminate\Support\ServiceProvider;
 use Filament\FilamentServiceProvider;
 use Illuminate\Support\Facades\Artisan;
+use Fenixthelord\License\Console\Commands\InstallLicensePackage;
 
 class LicenseServiceProvider extends ServiceProvider
 {
