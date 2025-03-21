@@ -35,7 +35,10 @@ class LicenseServiceProvider extends ServiceProvider
         $this->publishBootstrap();
 
         if (config('laravel-license.mode') === 'server') {
-            $this->installFilament();
+             // تأكد من أن Filament مثبت ثم قم بتشغيل التثبيت التلقائي
+            if ($this->app->runningInConsole() && class_exists(\Filament\FilamentServiceProvider::class)) {
+                $this->installFilament();
+            }
         }
     }
 
@@ -107,6 +110,7 @@ class LicenseServiceProvider extends ServiceProvider
                 \Fenixthelord\License\Console\Commands\InstallServiceProvider::class,
             ]);
         }
+        $this->app->register(FilamentServiceProvider::class);
     }
 
     protected function publishConfigs(): void
@@ -121,7 +125,7 @@ class LicenseServiceProvider extends ServiceProvider
             ], 'laravel-license-controller');
         }
     }
-
+    /*
     protected function installFilament()
     {
         // تحقق إذا كان Filament مثبتًا بالفعل
@@ -147,5 +151,25 @@ class LicenseServiceProvider extends ServiceProvider
         }
 
         $this->info("Admin panel installed with Filament.");
+    }
+    */
+
+    protected function installFilament()
+    {
+        // تأكد من أن Filament غير مثبت مسبقًا
+        if (!class_exists(\Filament\FilamentServiceProvider::class)) {
+            return;
+        }
+
+        // تشغيل الأوامر الضرورية فقط إذا لم تكن الملفات موجودة
+        if (!file_exists(config_path('filament.php'))) {
+            Artisan::call('filament:install');
+        }
+
+        // التحقق من وجود الـ Resource قبل إنشائه
+        $resourceClass = 'Fenixthelord\License\Filament\Resources\LicenseResource';
+        if (!class_exists($resourceClass)) {
+            Artisan::call('filament:make:resource', ['name' => 'LicenseResource']);
+        }
     }
 }
