@@ -145,7 +145,7 @@ class LicenseServiceProvider extends ServiceProvider
         // التأكد من إنشاء LicenseResource إذا لم يكن موجودًا
         $resourceClass = 'App\\Filament\\Resources\\LicenseResource';
         if (!class_exists($resourceClass)) {
-            Artisan::call('filament:make:resource', ['name' => 'LicenseResource']);
+            //Artisan::call('filament:make:resource', ['name' => 'LicenseResource']);
         }
     }
 }
