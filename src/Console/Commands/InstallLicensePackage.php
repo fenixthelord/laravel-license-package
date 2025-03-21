@@ -46,8 +46,6 @@ class InstallLicensePackage extends Command
         }
     }
 
-    
-
     /**
      * إعداد وضع العميل.
      */
@@ -115,10 +113,6 @@ class InstallLicensePackage extends Command
         }
     }
 
-
-
-    
-    
     /**
      * إعداد وضع السيرفر.
      */
@@ -134,7 +128,11 @@ class InstallLicensePackage extends Command
         // نشر التوجيهات (routes/api.php)
         $this->publishRoutes();
 
-         $this->publishModel();
+        // نشر النموذج
+        $this->publishModel();
+
+        // التحقق من Filament وتثبيته إذا كان غير مثبت
+        $this->installFilament();
     }
     
     /**
@@ -180,5 +178,22 @@ class InstallLicensePackage extends Command
         } else {
             $this->info('License Model already exists, skipping.');
         }
+    }
+
+    /**
+     * التحقق من Filament وتثبيته إذا لم يكن مثبتًا.
+     */
+    protected function installFilament()
+    {
+        // تحقق إذا كان Filament مثبتًا بالفعل
+        if (!class_exists(\Filament\FilamentServiceProvider::class)) {
+            $this->info('Filament not found. Skipping Filament installation...');
+            return;
+        }
+
+        // تثبيت Filament إذا لم يكن مثبتًا
+        $this->info('Filament found. Installing Filament...');
+        Artisan::call('filament:make:resource', ['name' => 'LicenseResource']);
+        $this->info('Filament setup completed.');
     }
 }
