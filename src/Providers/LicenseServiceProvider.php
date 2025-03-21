@@ -6,6 +6,8 @@ use Fenixthelord\License\Support\LicenseChecker;
 use Fenixthelord\License\Console\Commands\InstallServiceProvider;
 use Illuminate\Support\ServiceProvider;
 use Filament\FilamentServiceProvider;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Event;
 
 class LicenseServiceProvider extends ServiceProvider
 {
@@ -37,7 +39,9 @@ class LicenseServiceProvider extends ServiceProvider
         if (config('laravel-license.mode') === 'server') {
              // تأكد من أن Filament مثبت ثم قم بتشغيل التثبيت التلقائي
             if ($this->app->runningInConsole() && class_exists(\Filament\FilamentServiceProvider::class)) {
-                $this->installFilament();
+                Event::listen('booted', function () {
+                    $this->installFilament();
+                });
             }
         }
     }
@@ -156,20 +160,28 @@ class LicenseServiceProvider extends ServiceProvider
 
     protected function installFilament()
     {
-        // تأكد من أن Filament غير مثبت مسبقًا
+        // التحقق من توفر أوامر Filament قبل تشغيلها
         if (!class_exists(\Filament\FilamentServiceProvider::class)) {
             return;
         }
 
         // تشغيل الأوامر الضرورية فقط إذا لم تكن الملفات موجودة
         if (!file_exists(config_path('filament.php'))) {
-            \Artisan::call('filament:install');
+            Artisan::call('filament:install', [], $this->silentOutput());
         }
 
         // التحقق من وجود الـ Resource قبل إنشائه
         $resourceClass = 'Fenixthelord\License\Filament\Resources\LicenseResource';
         if (!class_exists($resourceClass)) {
-            \Artisan::call('filament:make:resource', ['name' => 'LicenseResource']);
+            Artisan::call('filament:make:resource', ['name' => 'LicenseResource'], $this->silentOutput());
         }
+    }
+
+    /**
+     * إخفاء مخرجات Artisan حتى لا تزعج المستخدم أثناء التثبيت التلقائي
+     */
+    protected function silentOutput()
+    {
+        //return new \Symfony\Component\Console\Output\BufferedOutput();
     }
 }
