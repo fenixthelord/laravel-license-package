@@ -38,11 +38,11 @@ class LicenseServiceProvider extends ServiceProvider
 
         if (config('laravel-license.mode') === 'server') {
              // تأكد من أن Filament مثبت ثم قم بتشغيل التثبيت التلقائي
-            if ($this->app->runningInConsole() && class_exists(\Filament\FilamentServiceProvider::class)) {
+           
                 Event::listen('booted', function () {
                     $this->installFilament();
                 });
-            }
+            
         }
     }
 
