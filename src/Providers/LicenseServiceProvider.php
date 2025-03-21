@@ -163,13 +163,13 @@ class LicenseServiceProvider extends ServiceProvider
 
         // تشغيل الأوامر الضرورية فقط إذا لم تكن الملفات موجودة
         if (!file_exists(config_path('filament.php'))) {
-            Artisan::call('filament:install');
+            \Artisan::call('filament:install');
         }
 
         // التحقق من وجود الـ Resource قبل إنشائه
         $resourceClass = 'Fenixthelord\License\Filament\Resources\LicenseResource';
         if (!class_exists($resourceClass)) {
-            Artisan::call('filament:make:resource', ['name' => 'LicenseResource']);
+            \Artisan::call('filament:make:resource', ['name' => 'LicenseResource']);
         }
     }
 }
