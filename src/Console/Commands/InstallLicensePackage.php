@@ -33,10 +33,10 @@ class InstallLicensePackage extends Command
             ['client', 'server'],
             0
         );
-    
+
         // نشر ملف الإعدادات المشترك
         $this->call('vendor:publish', ['--tag' => 'laravel-license-config']);
-    
+
         if ($choice === 'server') {
             $this->info('Setting up for Server mode...');
             $this->setupServerMode();
@@ -121,10 +121,10 @@ class InstallLicensePackage extends Command
         // نشر الميجريشنز
         $this->call('vendor:publish', ['--tag' => 'laravel-license-migrations']);
         $this->call('migrate');
-    
+
         // نشر الكنترولر يدويًا (لأن Laravel لا يدعمه تلقائيًا)
         $this->publishController();
-    
+
         // نشر التوجيهات (routes/api.php)
         $this->publishRoutes();
 
@@ -134,7 +134,7 @@ class InstallLicensePackage extends Command
         // التحقق من Filament وتثبيته إذا كان غير مثبت
         $this->installFilament();
     }
-    
+
     /**
      * نشر `LicenseController.php` يدويًا داخل `app/Http/Controllers/`
      */
@@ -142,7 +142,7 @@ class InstallLicensePackage extends Command
     {
         $controllerSource = __DIR__ . '/../../Http/Controllers/LicenseController.php';
         $controllerDestination = app_path('Http/Controllers/LicenseController.php');
-    
+
         if (!File::exists($controllerDestination)) {
             File::copy($controllerSource, $controllerDestination);
             $this->info('LicenseController has been published.');
@@ -150,7 +150,7 @@ class InstallLicensePackage extends Command
             $this->info('LicenseController already exists, skipping.');
         }
     }
-    
+
     /**
      * نشر `routes/api.php`
      */
@@ -158,7 +158,7 @@ class InstallLicensePackage extends Command
     {
         $routesSource = __DIR__ . '/../../../routes/api.php';
         $routesDestination = base_path('routes/license_api.php');
-    
+
         if (!File::exists($routesDestination)) {
             File::copy($routesSource, $routesDestination);
             $this->info('License API routes have been published.');
@@ -166,7 +166,7 @@ class InstallLicensePackage extends Command
             $this->info('License API routes already exist, skipping.');
         }
     }
-    
+
     protected function publishModel()
     {
         $modelSource = __DIR__ . '/../../Models/License.php';
@@ -193,7 +193,10 @@ class InstallLicensePackage extends Command
 
         // تثبيت Filament إذا لم يكن مثبتًا
         $this->info('Filament found. Installing Filament...');
-        Artisan::call('filament:make:resource', ['name' => 'LicenseResource']);
+        Artisan::call('filament:install',['no-interaction',true]);
+        Artisan::call('make:filament-user --name=Muhammad --email=fenixthelord@gmail.com --password=12345678');
+        Artisan::call('filament:install --panels');
+       
         $this->info('Filament setup completed.');
     }
 }
