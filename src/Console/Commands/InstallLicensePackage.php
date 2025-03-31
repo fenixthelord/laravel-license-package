@@ -5,6 +5,8 @@ namespace Fenixthelord\License\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Route;
+
 
 class InstallLicensePackage extends Command
 {
@@ -132,7 +134,7 @@ class InstallLicensePackage extends Command
         $this->publishModel();
 
         // التحقق من Filament وتثبيته إذا كان غير مثبت
-        $this->installFilament();
+        //$this->installFilament();
     }
 
     /**
@@ -191,12 +193,69 @@ class InstallLicensePackage extends Command
             return;
         }
 
-        // تثبيت Filament إذا لم يكن مثبتًا
+        // تثبيت Filament والتأكد من عمله بشكل سليم
         $this->info('Filament found. Installing Filament...');
-        Artisan::call('filament:install',['no-interaction',true]);
-        Artisan::call('make:filament-user --name=Muhammad --email=fenixthelord@gmail.com --password=12345678');
-        Artisan::call('filament:install --panels');
-       
+
+        // تشغيل Filament install بدون تفاعل
+        $this->call('filament:install', ['--no-interaction' => true]);
+
+        // تثبيت Panels بدون الحاجة إلى `--provider`
+        $this->call('filament:install', ['--panels' => true]);
+
+
+        // نشر إعدادات Filament
+        Artisan::call('vendor:publish', ['--tag' => 'filament-config']);
+
+        // حذف الكاش وإعادة تحميله لضمان تسجيل المسارات
+        Artisan::call('optimize:clear');
+        Artisan::call('route:clear');
+
+        // تسجيل `LicensePanelProvider` يدويًا إذا كان غير موجود
+        //$this->registerPanelProvider();
+
+        // التحقق من تسجيل Routes الخاصة بـ Filament
+        if (!Route::has('login')) {
+            $this->warn('Filament routes not loaded properly. Attempting to fix...');
+            Artisan::call('config:clear');
+            Artisan::call('cache:clear');
+        }
+
+        // إنشاء مستخدم Filament افتراضي
+        Artisan::call('make:filament-user', [
+            '--name' => 'Muhammad',
+            '--email' => 'fenixthelord@gmail.com',
+            '--password' => '12345678'
+        ]);
+
+        $this->info('Filament user create successfuly.');
         $this->info('Filament setup completed.');
     }
+
+    /**
+     * تسجيل `LicensePanelProvider` في حالة عدم توفره.
+     */
+    protected function registerPanelProvider()
+    {
+        $configPath = config_path('app.php');
+
+        if (File::exists($configPath)) {
+            $configContent = File::get($configPath);
+            $providerClass = "App\\Providers\\LicensePanelProvider::class,";
+
+            if (!str_contains($configContent, $providerClass)) {
+                $this->info('Registering LicensePanelProvider...');
+                $updatedContent = str_replace(
+                    "'providers' => [",
+                    "'providers' => [\n        $providerClass",
+                    $configContent
+                );
+                File::put($configPath, $updatedContent);
+            } else {
+                $this->info('LicensePanelProvider is already registered.');
+            }
+        } else {
+            $this->error('app.php not found! Provider registration skipped.');
+        }
+    }
+
 }
