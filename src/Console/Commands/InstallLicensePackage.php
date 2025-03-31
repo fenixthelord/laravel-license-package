@@ -54,7 +54,7 @@ class InstallLicensePackage extends Command
     protected function setupClientMode()
     {
         // نشر وإضافة Middleware تلقائيًا
-        $this->call('vendor:publish', ['--tag' => 'laravel-license-middleware']);
+        //$this->call('vendor:publish', ['--tag' => 'laravel-license-middleware']);
         $this->addMiddlewareToKernel();
 
         // تسجيل Service
@@ -125,13 +125,13 @@ class InstallLicensePackage extends Command
         $this->call('migrate');
 
         // نشر الكنترولر يدويًا (لأن Laravel لا يدعمه تلقائيًا)
-        $this->publishController();
+        //$this->publishController();
 
         // نشر التوجيهات (routes/api.php)
-        $this->publishRoutes();
+        //$this->publishRoutes();
 
         // نشر النموذج
-        $this->publishModel();
+        //$this->publishModel();
 
         // التحقق من Filament وتثبيته إذا كان غير مثبت
         //$this->installFilament();
