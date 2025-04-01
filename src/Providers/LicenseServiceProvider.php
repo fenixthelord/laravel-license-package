@@ -4,6 +4,7 @@ namespace Fenixthelord\License\Providers;
 
 use Fenixthelord\License\Support\LicenseChecker;
 use Fenixthelord\License\Console\Commands\InstallLicensePackage;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class LicenseServiceProvider extends ServiceProvider
@@ -14,25 +15,83 @@ class LicenseServiceProvider extends ServiceProvider
     public function boot(): void
     {
         if (config('laravel-license.mode') === 'client') {
-            LicenseChecker::ensureLicensePackageExists();
-            if (!class_exists(\Fenixthelord\License\Http\Middleware\CheckLicense::class)) {
-                exit("Error: License package middleware is missing. The application cannot run.");
-            }
-            $this->app['router']->pushMiddlewareToGroup('web', \Fenixthelord\License\Http\Middleware\CheckLicense::class);
+            $this->ensureClientSetup();
+        }
+
+        if (config('laravel-license.mode') === 'server') {
+            $this->registerApiRoutes();
+            $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
         }
 
         if ($this->app->runningInConsole()) {
-            $this->commands([
-                InstallLicensePackage::class,
-            ]);
+            $this->registerCommands();
+            $this->publishResources();
         }
 
         $this->registerMiddleware();
-        $this->loadServerResources();
-        $this->publishResources();
         $this->publishBootstrap();
     }
 
+    /**
+     * تأكد من إعداد وضع العميل (Client)
+     */
+    protected function ensureClientSetup(): void
+    {
+        LicenseChecker::ensureLicensePackageExists();
+
+        if (!class_exists(\Fenixthelord\License\Http\Middleware\CheckLicense::class)) {
+            exit("Error: License package middleware is missing. The application cannot run.");
+        }
+
+        $this->app['router']->pushMiddlewareToGroup('web', \Fenixthelord\License\Http\Middleware\CheckLicense::class);
+    }
+
+    /**
+     * تحميل مسارات API داخل مجموعة `api`
+     */
+    protected function registerApiRoutes(): void
+    {
+        $routePath = __DIR__ . '/../../routes/api.php';
+
+        if (file_exists($routePath)) {
+            Route::prefix('api')
+                ->middleware('api')
+                ->group($routePath);
+        }
+    }
+
+    /**
+     * تسجيل أوامر الـ Console.
+     */
+    protected function registerCommands(): void
+    {
+        $this->commands([
+            InstallLicensePackage::class,
+        ]);
+    }
+
+    /**
+     * تسجيل الميدلوير
+     */
+    protected function registerMiddleware(): void
+    {
+        $this->app['router']->aliasMiddleware('checkLicense', \Fenixthelord\License\Http\Middleware\CheckLicense::class);
+    }
+
+    /**
+     * نشر الملفات المطلوبة.
+     */
+    protected function publishResources(): void
+    {
+        $this->publishes([
+            __DIR__ . '/../../config/laravel-license.php' => config_path('laravel-license.php'),
+            __DIR__ . '/../../database/migrations/' => database_path('migrations'),
+        ], 'laravel-license');
+    }
+
+    /**
+     * نشر ملف bootstrap.
+     */
     protected function publishBootstrap(): void
     {
         $this->publishes([
@@ -41,56 +100,10 @@ class LicenseServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the package middleware.
-     */
-    protected function registerMiddleware(): void
-    {
-        $this->app['router']->aliasMiddleware('checkLicense', \Fenixthelord\License\Http\Middleware\CheckLicense::class);
-
-        if (config('laravel-license.mode') === 'client') {
-            $this->app['router']->pushMiddlewareToGroup('web', \Fenixthelord\License\Http\Middleware\CheckLicense::class);
-            LicenseChecker::ensureLicensePackageExists();
-        }
-    }
-
-    /**
-     * Load server migrations and routes if the mode is server.
-     */
-    protected function loadServerResources(): void
-    {
-        if (config('laravel-license.mode') === 'server') {
-            $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
-            $this->loadRoutesFrom(__DIR__ . '/../../routes/api.php');
-        }
-    }
-
-    /**
-     * Publish configuration file and other resources.
-     */
-    protected function publishResources(): void
-    {
-        if ($this->app->runningInConsole()) {
-            $this->publishes([
-                __DIR__ . '/../../config/laravel-license.php' => config_path('laravel-license.php'),
-            ], 'laravel-license-config');
-
-            $this->publishes([
-                __DIR__ . '/../../database/migrations/' => database_path('migrations'),
-            ], 'laravel-license-migrations');
-        }
-    }
-
-    /**
      * Register any application services.
      */
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../../config/laravel-license.php', 'laravel-license');
-
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                \Fenixthelord\License\Console\Commands\InstallLicensePackage::class,
-            ]);
-        }
     }
 }
