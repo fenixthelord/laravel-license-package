@@ -11,10 +11,17 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('licenses', function (Blueprint $table) {
+            // $table->id();
+            // $table->string('key')->unique();
+            // $table->string('product_id');
+            // $table->dateTime('valid_until');
+            // $table->string('domain')->nullable();
+            // $table->boolean('is_active')->default(true);
+            // $table->timestamps();
             $table->id();
-            $table->string('key')->unique();
-            $table->string('product_id');
-            $table->dateTime('valid_until');
+            $table->uuid('key')->unique();
+            $table->string('product_id')->autoIncrement();
+            $table->dateTime('valid_until')->default(now()->addDays(30));
             $table->string('domain')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
