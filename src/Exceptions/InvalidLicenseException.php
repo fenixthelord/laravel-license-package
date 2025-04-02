@@ -9,6 +9,15 @@ class InvalidLicenseException extends Exception
 {
     public function render($request)
     {
-       return abort(403, 'Invalid license or subscription expired | Please contact with "Eng.Muhammad Khalaf" https://wa.me/+963945235962');
+        $developerName = config('laravel-license.developer_name', 'the developer');
+        $supportContact = config('laravel-license.support_contact', 'the support channel');
+
+        $message = sprintf(
+            'Invalid license or subscription expired. Please contact %s via %s for assistance.',
+            $developerName,
+            $supportContact
+        );
+
+        return abort(403, $message);
     }
 }
