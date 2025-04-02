@@ -1,26 +1,38 @@
-# Laravel License Package
+# Laravel License 🔑
 
-Secure license management for Laravel applications.
+A simple package for adding software license validation to Laravel applications. Operates in two modes:
+
+*   **Client:** Verifies a license key against a remote server.
+*   **Server:** Acts as the API endpoint to validate keys.
 
 ## Installation
 
-composer require fenixthelord/laravel-license-package
+1.  **Require via Composer:**
+    ```bash
+    composer require fenixthelord/laravel-license
+    ```
 
+2.  **Run Install Command:** Choose `client` or `server` mode.
+    ```bash
+    php artisan license:install
+    ```
+    This publishes `config/laravel-license.php`.
 
+3.  **(Server Mode Only)** Run migrations:
+    ```bash
+    php artisan migrate
+    ```
 
+## Configuration
 
-
-Add to `.env`:
-
-LICENSE_MODE=server
-LICENSE_KEY=your_license_key
-LICENSE_SERVER_URL=https://your-license-server.com
-LICENSE_ENCRYPTION_KEY=your_encryption_key
-
+*   Set your mode (`client` or `server`) in `config/laravel-license.php`.
+*   Configure necessary details (Server URL, API keys, License Key, Developer Contact) via your `.env` file, referencing the keys in the config file.
 
 ## Usage
 
-php artisan license:install
+*   **Client Mode:** The included middleware automatically checks the configured license key against the server URL on web routes.
+*   **Server Mode:** Provides an API endpoint (`/api/licenses/verify`) for clients to validate their keys against the `licenses` database table.
+
 
 ## API Endpoints
 
@@ -28,8 +40,3 @@ php artisan license:install
 |----------|--------|-------------|
 | `/api/license/verify` | POST | Verify license validity |
 | `/api/license/generate` | POST | Generate new license |
-
-## Security
-
-Use HTTPS for all license server communications.
-
